@@ -26,8 +26,15 @@ class Paypal extends PortAbstract implements PortInterface
     protected $productName;
     protected $shipmentPrice;
     protected $redirectUrl;
+    protected $currency = 'USD';
 
 
+    /**
+     * @param string $currency
+     */
+    public function setPayPalCurrency($currency = 'USD'){
+        $this->currency = $currency;
+    }
 
     /**
      * {@inheritdoc}
@@ -124,19 +131,19 @@ class Paypal extends PortAbstract implements PortInterface
         $payer->setPaymentMethod('paypal');
         $item_1 = new Item();
         $item_1->setName($this->getProductName())// item name
-        ->setCurrency('USD')
+        ->setCurrency($this->currency)
             ->setQuantity(1)
             ->setPrice($this->amount); // unit price
         $item_2 = new Item();
         $item_2->setName('Shipment')
-            ->setCurrency('USD')
+            ->setCurrency($this->currency)
             ->setQuantity(1)
             ->setPrice($this->getShipmentPrice());
         // add item to list
         $item_list = new ItemList();
         $item_list->setItems([$item_1, $item_2]);
         $amount = new Amount();
-        $amount->setCurrency('USD')
+        $amount->setCurrency($this->currency)
             ->setTotal($this->getShipmentPrice() + $this->amount);
         $transaction = new Transaction();
         $transaction->setAmount($amount)

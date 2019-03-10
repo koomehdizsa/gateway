@@ -100,6 +100,11 @@ class Paypal extends PortAbstract implements PortInterface
         $this->redirectUrl = $url;
     }
 
+	public function getRedirectUrl()
+    {
+        return $this->redirectUrl;
+    }
+	
     /**
      * {@inheritdoc}
      */

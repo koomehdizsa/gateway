@@ -2,7 +2,7 @@
 
 namespace Larabookir\Gateway\Asanpardakht;
 
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use SoapClient;
 use Larabookir\Gateway\PortAbstract;
 use Larabookir\Gateway\PortInterface;
@@ -14,7 +14,7 @@ class Asanpardakht extends PortAbstract implements PortInterface
      *
      * @var string
      */
-    protected $serverUrl = 'https://services.asanpardakht.net/paygate/merchantservices.asmx?wsdl';
+    protected $serverUrl = 'https://ipgsoap.asanpardakht.ir/paygate/merchantservices.asmx?wsdl';
 
     /**
      * {@inheritdoc}
@@ -41,9 +41,8 @@ class Asanpardakht extends PortAbstract implements PortInterface
      */
     public function redirect()
     {
-
         return view('gateway::asan-pardakht-redirector')->with([
-            'refId' => $this->refId
+            'RefID' => $this->refId
         ]);
     }
 
@@ -141,7 +140,7 @@ class Asanpardakht extends PortAbstract implements PortInterface
      */
     protected function userPayment()
     {
-        $ReturningParams = Input::get('ReturningParams');
+        $ReturningParams = Request::input('ReturningParams');
         $ReturningParams = $this->decrypt($ReturningParams);
 
         $paramsArray = explode(",", $ReturningParams);
@@ -244,7 +243,7 @@ class Asanpardakht extends PortAbstract implements PortInterface
 
         try {
 
-            $soap = new SoapClient("https://services.asanpardakht.net/paygate/internalutils.asmx?WSDL");
+            $soap = new SoapClient("https://ipgsoap.asanpardakht.ir/paygate/internalutils.asmx?WSDL");
             $params = array(
                 'aesKey' => $key,
                 'aesVector' => $iv,
@@ -273,7 +272,7 @@ class Asanpardakht extends PortAbstract implements PortInterface
 
         try {
 
-            $soap = new SoapClient("https://services.asanpardakht.net/paygate/internalutils.asmx?WSDL");
+            $soap = new SoapClient("https://ipgsoap.asanpardakht.ir/paygate/internalutils.asmx?WSDL");
             $params = array(
                 'aesKey' => $key,
                 'aesVector' => $iv,
